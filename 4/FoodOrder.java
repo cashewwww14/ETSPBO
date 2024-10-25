@@ -2,44 +2,33 @@ import java.util.ArrayList;
 
 public class FoodOrder {
     protected ArrayList<MenuItem> menuItems;
-    private double totalPrice;
-    private boolean isPaid;
 
     public FoodOrder() {
         menuItems = new ArrayList<>();
-        totalPrice = 0;
-        isPaid = false;
     }
 
     public void addMenuItem(MenuItem item) {
         menuItems.add(item);
-        totalPrice += item.getPrice();
-    }
-
-    public void removeMenuItem(MenuItem item) {
-        if (menuItems.remove(item)) {
-            totalPrice -= item.getPrice();
-        }
-    }
-
-    public double getTotalPrice() {
-        return totalPrice;
-    }
-
-    public boolean isPaid() {
-        return isPaid;
-    }
-
-    public void pay() {
-        isPaid = true;
     }
 
     public void displayOrder() {
         System.out.println("Order Details:");
+        int index = 1;
         for (MenuItem item : menuItems) {
-            System.out.println(item);
+            System.out.println(index + ". " + item);
+            index++;
         }
-        System.out.println("Total Price: $" + totalPrice);
-        System.out.println("Paid: " + (isPaid ? "Yes" : "No"));
+    }
+
+    public double calculateTotalPrice(ArrayList<Integer> selectedItems, ArrayList<Integer> quantities) {
+        double total = 0;
+        for (int i = 0; i < selectedItems.size(); i++) {
+            int itemIndex = selectedItems.get(i) - 1;  // Menyesuaikan ke index ArrayList
+            int quantity = quantities.get(i);
+            if (itemIndex >= 0 && itemIndex < menuItems.size()) {
+                total += menuItems.get(itemIndex).getPrice() * quantity;
+            }
+        }
+        return total;
     }
 }
