@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
@@ -37,7 +38,7 @@ public class Main {
                         }
                     }
                     if (toRemove != null) {
-                        order.removeMenuItem(toRemove);
+                        order.menuItems.remove(toRemove);
                         System.out.println("Item dihapus.");
                     } else {
                         System.out.println("Item tidak ditemukan.");
@@ -47,8 +48,41 @@ public class Main {
                     order.displayOrder();
                     break;
                 case 4:
-                    order.pay();
-                    System.out.println("Pembayaran berhasil.");
+                    ArrayList<Integer> selectedItems = new ArrayList<>();
+                    ArrayList<Integer> quantities = new ArrayList<>();
+                    System.out.print("Masukkan jumlah jenis menu yang ingin dibayar: ");
+                    int count = scanner.nextInt();
+
+                    for (int i = 0; i < count; i++) {
+                        System.out.print("Masukkan nomor menu: ");
+                        int itemNumber = scanner.nextInt();
+                        System.out.print("Masukkan jumlah pesanan untuk menu tersebut: ");
+                        int quantity = scanner.nextInt();
+                        selectedItems.add(itemNumber);
+                        quantities.add(quantity);
+                    }
+
+                    double totalPrice = order.calculateTotalPrice(selectedItems, quantities);
+                    System.out.println("Total Harga: $" + totalPrice);
+
+                    double payment = 0;
+                    while (payment < totalPrice) {
+                        System.out.print("Masukkan nominal uang: ");
+                        double currentPayment = scanner.nextDouble();
+                        payment += currentPayment;
+
+                        if (payment < totalPrice) {
+                            double deficit = totalPrice - payment;
+                            System.out.println("Saldo tidak cukup. Kurang: $" + deficit);
+                        }
+                    }
+
+                    if (payment == totalPrice) {
+                        System.out.println("Pembayaran berhasil. Nominal Anda pas.");
+                    } else {
+                        double change = payment - totalPrice;
+                        System.out.println("Pembayaran berhasil. Kembalian: $" + change);
+                    }
                     break;
                 case 5:
                     isRunning = false;
